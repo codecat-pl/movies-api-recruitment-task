@@ -1,0 +1,12 @@
+{
+  "prod": {
+    "driver": "mongodb",
+    "database": "movies",
+    "host": "localhost"
+  },
+  "dev": {
+    "driver": "mongodb",
+    "database": "movies_test",
+    "host": "localhost"
+  }
+}
