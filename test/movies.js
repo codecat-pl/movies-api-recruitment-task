@@ -3,33 +3,46 @@ const chaiHttp = require('chai-http');
 const nock = require('nock');
 const app = require('../app');
 const config = require('../config');
-
 const MongoClient = require('mongodb').MongoClient;
-
-
-const url = 'mongodb://localhost:27017';
-const dbName = 'movies_test';
-
-
-
-
-
-chai.should();
+const Tools = require('./detail/tools');
+const should = chai.should();
 chai.use(chaiHttp);
 
 describe('API endpoints', ()=>{
-    let agent;
-    before(()=>{
+    let agent, movies, db;
+    before(async ()=>{
         agent = chai.request.agent(app);
+        db = await MongoClient.connect(config.db.url);
+        movies = db.collection('movies');
     });
+
+    beforeEach(()=>{
+        movies.remove({});
+    });
+
     after(()=>{
         agent.app.close();
+        db.close();
     });
 
     describe('GET /movies', ()=>{
         it('get status 200', async ()=>{
             const res = await requestGetMovies();
             res.should.have.status(200);
+        });
+
+        it('should return list of all movies in database', async ()=>{
+            await movies.insert({Title: 'The Matrix'});
+            await movies.insert({Title: 'Back to the future'});
+            const res = await requestGetMovies();
+            res.body.length.should.equal(2);
+        });
+
+        it('should return list of all movies in database', async ()=>{
+            await movies.insert({Title: 'The Matrix'});
+            await movies.insert({Title: 'Back to the future'});
+            const res = await requestGetMovies();
+            res.body.length.should.equal(2);
         });
 
         async function requestGetMovies(){
@@ -39,16 +52,11 @@ describe('API endpoints', ()=>{
     });
 
     describe('POST /movies', ()=>{
-        let client, movies;
         before(async ()=>{
             configureNock();
-            client = await MongoClient.connect(url);
-            movies = client.db(dbName).collection('movies');
-            movies.remove({});
         });
         after(()=>{
             nock.restore();
-            client.close();
         });
         afterEach(()=>{
             nock.cleanAll();
@@ -75,7 +83,7 @@ describe('API endpoints', ()=>{
         });
 
         it('post if title not exist should return error ', async ()=>{
-            const err = await expectFail(()=>{
+            const err = await Tools.expectFail(()=>{
                 return requestPostMovies({})
             });
             err.should.have.status(400);
@@ -84,12 +92,19 @@ describe('API endpoints', ()=>{
 
         it('post title not found by omdbapi', async ()=>{
             const apiRequest = mockApiRequestNotFound();
-            const err = await expectFail(()=>{
+            const err = await Tools.expectFail(()=>{
                 return requestPostMovies({Title: 'SomeNotExistingMovie'})
             });
             apiRequest.done();
             err.should.have.status(404);
             err.response.body.Error.should.be.equal('Movie not found!')
+        });
+
+        it('post should return data from database if exist (not omdbapi)', async ()=>{
+            await createMovieInDB();
+            const res = await requestPostMovies();
+            res.should.have.status(200);
+            res.body.should.have.property('Title', 'The Matrix');
         });
 
 
@@ -120,19 +135,9 @@ describe('API endpoints', ()=>{
 
 });
 
-
 function configureNock(){
     if(!nock.isActive())
         nock.activate();
     nock.disableNetConnect();
     nock.enableNetConnect('127.0.0.1');
-}
-
-async function expectFail(func){
-    try {
-        await func();
-        return Promise.reject("This line should not be executed.");
-    }catch(err){
-        return Promise.resolve(err);
-    }
 }

@@ -1,28 +1,31 @@
 const Router = require('express-promise-router');
 const {MovieNotFoundError, MissingApiParameterError} = require('../lib/errors');
 const OMDB = require('../lib/omdb');
-
+const Movies = require('../model/movies');
 
 const router = Router();
 router.get('/', getMovies);
-router.post('/', checkCreateMovieParameters, createMovieEntry);
+router.post('/', createMovieEntry);
 module.exports = router;
 
 
-function getMovies(req, res){
-    res.send("OK");
+async function getMovies(req, res){
+    const movies = await Movies.find();
+    res.json(movies);
 }
 
 async function createMovieEntry(req, res){
-    const data = await OMDB.findMovie(req.body.Title);
-
-    if(data.Error)
-        throw new MovieNotFoundError();
-
-    res.json(data);
+    if(!req.body || !req.body.Title) throw new MissingApiParameterError();
+    const movieTitle = req.body.Title;
+    let movieData = await Movies.findOneByTitle(movieTitle);
+    if(!movieData){
+        movieData = await fatchFromOmdbAndSave(movieTitle);
+    }
+    res.json(movieData);
 }
 
-function checkCreateMovieParameters(req, res, next){
-    if(!req.body.Title) throw new MissingApiParameterError();
-    next();
+async function fatchFromOmdbAndSave(title){
+    const data = await OMDB.findMovie(title);
+    await Movies.create(data);
+    return data;
 }

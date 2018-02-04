@@ -1,16 +1,20 @@
 
-
-
-module.exports = {
+const common = {
     port: process.env.PORT || 8000,
     omdbapi_key: 'b381b55a',
+};
 
-    production:{
+const envs = {
+     production:{
         db: 'mongo',
     },
 
-    test: {
-        db: 'mongo',
-        url: 'mongodb://localhost/movies_test'
+    development: {
+        db: {
+            type: 'mongo',
+            url: 'mongodb://localhost/movies_test'
+        }
     }
 };
+
+module.exports = Object.assign({},common, envs[process.env.NODE_ENV || 'development']);
