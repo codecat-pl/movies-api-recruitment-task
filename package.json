@@ -4,6 +4,7 @@
   "description": "This is the first task in recruitment process for the position of Node.js Developer at Netguru.",
   "main": "app.js",
   "scripts": {
+    "install": "db-migrate up",
     "start": "node app.js",
     "test": "mocha"
   },

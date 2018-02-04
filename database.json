@@ -8,5 +8,10 @@
     "driver": "mongodb",
     "database": "movies_test",
     "host": "localhost"
+  },
+  "test": {
+    "driver": "mongodb",
+    "database": "movies_test",
+    "host": "localhost"
   }
 }
