@@ -5,8 +5,9 @@ const common = {
 };
 
 const envs = {
-     production:{
+    production:{
         db: 'mongo',
+        url: process.env.MONGODB_URI
     },
 
     development: {
@@ -17,4 +18,9 @@ const envs = {
     }
 };
 
-module.exports = Object.assign({},common, envs[process.env.NODE_ENV || 'development']);
+module.exports = Object.assign({},common, getCurrentEnv());
+
+function getCurrentEnv(){
+    const envName = process.env.NODE_ENV || 'development';
+    return envs[envName];
+}

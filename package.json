@@ -30,5 +30,8 @@
       "test",
       "migrations"
     ]
+  },
+  "engines": {
+    "node": "8.9.4"
   }
 }
