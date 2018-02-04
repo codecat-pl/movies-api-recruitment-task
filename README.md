@@ -3,6 +3,7 @@
 To setup and run application:
 
 ```bash
+nvm use
 npm install
 npm start
 ```
