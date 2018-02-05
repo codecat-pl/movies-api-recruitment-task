@@ -1,0 +1,185 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a simple API for recruitment purposes"
+  version: "1.0.0"
+  title: "MoviesAPI"
+  contact:
+    email: "mateusz@russak.biz"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/mit-license.php"
+host: "moviesapi.codecat.pl"
+basePath: "/"
+tags:
+- name: "public"
+  description: "Operations available for everyone"
+schemes:
+- "http"
+paths:
+  /movies:
+    get:
+      tags:
+      - "public"
+      summary: "searches for movies in database"
+      description: "By calling this operation you can search for movies in the system.\n"
+      operationId: "findMovies"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "query"
+        description: "Pass an optional movie id for looking up for specific movie."
+        required: false
+        type: "string"
+      - name: "search"
+        in: "query"
+        description: "This param can be used for searching. All words will be tested\
+          \ against movie title."
+        required: false
+        type: "string"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Movie"
+        404:
+          description: "Movie not found!"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Public"
+    post:
+      tags:
+      - "public"
+      summary: "adds movies to database"
+      description: "Adds movies to database"
+      operationId: "addMovie"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Title"
+        description: "Movie title to add - more informations will be fetched from\
+          \ OMDB API."
+        required: false
+        schema:
+          $ref: "#/definitions/MovieQuery"
+      responses:
+        201:
+          description: "item created"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing item already exists"
+      x-swagger-router-controller: "Public"
+  /comments:
+    get:
+      tags:
+      - "public"
+      summary: "returns list of comments"
+      description: "By calling this operation you can search for movies in the system.\n"
+      operationId: "findComments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Movie"
+        in: "query"
+        description: "pass an optional movie id to get comments only for specific\
+          \ movie"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Comment"
+        404:
+          description: "Movie not found!"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Public"
+    post:
+      tags:
+      - "public"
+      summary: "puts comment into database"
+      description: "By calling this operation you can search for movies in the system.\n"
+      operationId: "addComment"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Movie"
+        in: "query"
+        description: "pass an optional movie id to get comments only for specific\
+          \ movie"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Comment"
+        404:
+          description: "Movie not found!"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Public"
+definitions:
+  MovieQuery:
+    type: "object"
+    required:
+    - "Title"
+    properties:
+      Title:
+        type: "string"
+        example: "The Matrix"
+        description: "Title of the movie you want add to database"
+    example:
+      Title: "The Matrix"
+  Comment:
+    type: "object"
+    required:
+    - "body"
+    - "movie"
+    properties:
+      movie:
+        type: "string"
+        description: "movie is id of foreign movie table row id"
+      body:
+        type: "string"
+        description: "text content of the comment"
+    example:
+      movie: "movie"
+      body: "body"
+  Movie:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      Title:
+        type: "string"
+        example: "Widget Adapter"
+      Year:
+        type: "number"
+        example: 2016
+    example:
+      Year: 2016
+      Title: "Widget Adapter"
+      id: "d290f1ee-6c54-4b01-90e6-d701748f0851"
