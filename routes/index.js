@@ -3,6 +3,9 @@ const debug = require('debug')('routes:movieAPI');
 
 
 const router = Router();
+router.get('/', (req,res,next)=>{
+    res.send("<a href='https://github.com/codecat-pl/movies-api-recruitment-task'>Visit github for more info</a>");
+});
 router.use('/movies', require('./movies'));
 router.use('/comments', require('./comments'));
 router.use(handleErrors);
