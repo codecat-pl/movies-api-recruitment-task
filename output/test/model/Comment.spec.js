@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0
@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.MoviesApiRecruitmentTask);
+    factory(root.expect, root.MoviesApi);
   }
-}(this, function(expect, MoviesApiRecruitmentTask) {
+}(this, function(expect, MoviesApi) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new MoviesApiRecruitmentTask.Comment();
+    instance = new MoviesApi.Comment();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,19 +50,19 @@
   describe('Comment', function() {
     it('should create an instance of Comment', function() {
       // uncomment below and update the code to test Comment
-      //var instane = new MoviesApiRecruitmentTask.Comment();
-      //expect(instance).to.be.a(MoviesApiRecruitmentTask.Comment);
+      //var instane = new MoviesApi.Comment();
+      //expect(instance).to.be.a(MoviesApi.Comment);
     });
 
     it('should have the property movie (base name: "movie")', function() {
       // uncomment below and update the code to test the property movie
-      //var instane = new MoviesApiRecruitmentTask.Comment();
+      //var instane = new MoviesApi.Comment();
       //expect(instance).to.be();
     });
 
     it('should have the property body (base name: "body")', function() {
       // uncomment below and update the code to test the property body
-      //var instane = new MoviesApiRecruitmentTask.Comment();
+      //var instane = new MoviesApi.Comment();
       //expect(instance).to.be();
     });
 

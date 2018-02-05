@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0
@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.MoviesApiRecruitmentTask);
+    factory(root.expect, root.MoviesApi);
   }
-}(this, function(expect, MoviesApiRecruitmentTask) {
+}(this, function(expect, MoviesApi) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new MoviesApiRecruitmentTask.MovieQuery();
+    instance = new MoviesApi.MovieQuery();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,13 +50,13 @@
   describe('MovieQuery', function() {
     it('should create an instance of MovieQuery', function() {
       // uncomment below and update the code to test MovieQuery
-      //var instane = new MoviesApiRecruitmentTask.MovieQuery();
-      //expect(instance).to.be.a(MoviesApiRecruitmentTask.MovieQuery);
+      //var instane = new MoviesApi.MovieQuery();
+      //expect(instance).to.be.a(MoviesApi.MovieQuery);
     });
 
     it('should have the property title (base name: "Title")', function() {
       // uncomment below and update the code to test the property title
-      //var instane = new MoviesApiRecruitmentTask.MovieQuery();
+      //var instane = new MoviesApi.MovieQuery();
       //expect(instance).to.be();
     });
 

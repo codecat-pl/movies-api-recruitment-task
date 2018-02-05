@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0
@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.MoviesApiRecruitmentTask);
+    factory(root.expect, root.MoviesApi);
   }
-}(this, function(expect, MoviesApiRecruitmentTask) {
+}(this, function(expect, MoviesApi) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new MoviesApiRecruitmentTask.Movie();
+    instance = new MoviesApi.Movie();
   });
 
   var getProperty = function(object, getter, property) {
@@ -50,25 +50,25 @@
   describe('Movie', function() {
     it('should create an instance of Movie', function() {
       // uncomment below and update the code to test Movie
-      //var instane = new MoviesApiRecruitmentTask.Movie();
-      //expect(instance).to.be.a(MoviesApiRecruitmentTask.Movie);
+      //var instane = new MoviesApi.Movie();
+      //expect(instance).to.be.a(MoviesApi.Movie);
     });
 
     it('should have the property id (base name: "id")', function() {
       // uncomment below and update the code to test the property id
-      //var instane = new MoviesApiRecruitmentTask.Movie();
+      //var instane = new MoviesApi.Movie();
       //expect(instance).to.be();
     });
 
     it('should have the property title (base name: "Title")', function() {
       // uncomment below and update the code to test the property title
-      //var instane = new MoviesApiRecruitmentTask.Movie();
+      //var instane = new MoviesApi.Movie();
       //expect(instance).to.be();
     });
 
     it('should have the property year (base name: "Year")', function() {
       // uncomment below and update the code to test the property year
-      //var instane = new MoviesApiRecruitmentTask.Movie();
+      //var instane = new MoviesApi.Movie();
       //expect(instance).to.be();
     });
 

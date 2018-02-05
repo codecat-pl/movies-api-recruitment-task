@@ -1,4 +1,4 @@
-# MoviesApiRecruitmentTask.MovieQuery
+# MoviesApi.MovieQuery
 
 ## Properties
 Name | Type | Description | Notes

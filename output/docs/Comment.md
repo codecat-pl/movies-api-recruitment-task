@@ -1,4 +1,4 @@
-# MoviesApiRecruitmentTask.Comment
+# MoviesApi.Comment
 
 ## Properties
 Name | Type | Description | Notes

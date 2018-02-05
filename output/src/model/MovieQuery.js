@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0

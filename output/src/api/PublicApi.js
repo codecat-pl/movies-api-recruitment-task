@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0
@@ -175,8 +175,8 @@ export default class PublicApi {
      * searches for movies in database
      * By calling this operation you can search for movies in the system. 
      * @param {Object} opts Optional parameters
-     * @param {String} opts.title pass an optional movie title for looking up for specific movie
-     * @param {Number} opts.skip number of records to skip for pagination
+     * @param {String} opts.id Pass an optional movie id for looking up for specific movie.
+     * @param {String} opts.search This param can be used for searching. All words will be tested against movie title.
      * @param {Number} opts.limit maximum number of records to return
      * @param {module:api/PublicApi~findMoviesCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/Movie>}
@@ -189,8 +189,8 @@ export default class PublicApi {
       let pathParams = {
       };
       let queryParams = {
-        'Title': opts['title'],
-        'skip': opts['skip'],
+        'id': opts['id'],
+        'search': opts['search'],
         'limit': opts['limit']
       };
       let headerParams = {

@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0
@@ -20,15 +20,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.MoviesApiRecruitmentTask);
+    factory(root.expect, root.MoviesApi);
   }
-}(this, function(expect, MoviesApiRecruitmentTask) {
+}(this, function(expect, MoviesApi) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new MoviesApiRecruitmentTask.PublicApi();
+    instance = new MoviesApi.PublicApi();
   });
 
   var getProperty = function(object, getter, property) {

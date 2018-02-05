@@ -1,4 +1,4 @@
-# MoviesApiRecruitmentTask.PublicApi
+# MoviesApi.PublicApi
 
 All URIs are relative to *http://moviesapi.codecat.pl*
 
@@ -20,9 +20,9 @@ By calling this operation you can search for movies in the system.
 
 ### Example
 ```javascript
-import MoviesApiRecruitmentTask from 'movies_api___recruitment_task';
+import MoviesApi from 'movies_api';
 
-let apiInstance = new MoviesApiRecruitmentTask.PublicApi();
+let apiInstance = new MoviesApi.PublicApi();
 
 let opts = { 
   'movie': "movie_example" // String | pass an optional movie id to get comments only for specific movie
@@ -66,12 +66,12 @@ Adds movies to database
 
 ### Example
 ```javascript
-import MoviesApiRecruitmentTask from 'movies_api___recruitment_task';
+import MoviesApi from 'movies_api';
 
-let apiInstance = new MoviesApiRecruitmentTask.PublicApi();
+let apiInstance = new MoviesApi.PublicApi();
 
 let opts = { 
-  'title': new MoviesApiRecruitmentTask.MovieQuery() // MovieQuery | Movie title to add - more informations will be fetched from OMDB API.
+  'title': new MoviesApi.MovieQuery() // MovieQuery | Movie title to add - more informations will be fetched from OMDB API.
 };
 
 apiInstance.addMovie(opts, (error, data, response) => {
@@ -112,9 +112,9 @@ By calling this operation you can search for movies in the system.
 
 ### Example
 ```javascript
-import MoviesApiRecruitmentTask from 'movies_api___recruitment_task';
+import MoviesApi from 'movies_api';
 
-let apiInstance = new MoviesApiRecruitmentTask.PublicApi();
+let apiInstance = new MoviesApi.PublicApi();
 
 let opts = { 
   'movie': "movie_example" // String | pass an optional movie id to get comments only for specific movie
@@ -158,13 +158,13 @@ By calling this operation you can search for movies in the system.
 
 ### Example
 ```javascript
-import MoviesApiRecruitmentTask from 'movies_api___recruitment_task';
+import MoviesApi from 'movies_api';
 
-let apiInstance = new MoviesApiRecruitmentTask.PublicApi();
+let apiInstance = new MoviesApi.PublicApi();
 
 let opts = { 
-  'title': "title_example", // String | pass an optional movie title for looking up for specific movie
-  'skip': 56, // Number | number of records to skip for pagination
+  'id': "id_example", // String | Pass an optional movie id for looking up for specific movie.
+  'search': "search_example", // String | This param can be used for searching. All words will be tested against movie title.
   'limit': 56 // Number | maximum number of records to return
 };
 
@@ -181,8 +181,8 @@ apiInstance.findMovies(opts, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **title** | **String**| pass an optional movie title for looking up for specific movie | [optional] 
- **skip** | **Number**| number of records to skip for pagination | [optional] 
+ **id** | **String**| Pass an optional movie id for looking up for specific movie. | [optional] 
+ **search** | **String**| This param can be used for searching. All words will be tested against movie title. | [optional] 
  **limit** | **Number**| maximum number of records to return | [optional] 
 
 ### Return type

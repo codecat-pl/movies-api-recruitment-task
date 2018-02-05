@@ -1,5 +1,5 @@
 /**
- * MoviesAPI - recruitment task
+ * MoviesAPI
  * This is a simple API for recruitment purposes
  *
  * OpenAPI spec version: 1.0.0
@@ -25,9 +25,9 @@ import PublicApi from './api/PublicApi';
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var MoviesApiRecruitmentTask = require('index'); // See note below*.
-* var xxxSvc = new MoviesApiRecruitmentTask.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new MoviesApiRecruitmentTask.Yyy(); // Construct a model instance.
+* var MoviesApi = require('index'); // See note below*.
+* var xxxSvc = new MoviesApi.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new MoviesApi.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -39,8 +39,8 @@ import PublicApi from './api/PublicApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new MoviesApiRecruitmentTask.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new MoviesApiRecruitmentTask.Yyy(); // Construct a model instance.
+* var xxxSvc = new MoviesApi.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new MoviesApi.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
