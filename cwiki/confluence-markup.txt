@@ -1,0 +1,310 @@
+h1. MoviesAPI This is a simple API for recruitment purposes
+
+*Version:* 1.0.0
+
+----
+
+{toc:printable=true|style=square|minLevel=2|maxLevel=3|type=list|outline=false|include=.*}
+
+h2. Endpoints
+
+    h3. addComment
+    {status:colour=Yellow|title=post|subtle=false}
+    {code}
+    post /comments
+    {code}
+    *Summary:* puts comment into database
+    *Description:* By calling this operation you can search for movies in the system. 
+
+
+    h4. Parameters
+
+
+
+        h5. Query Parameters
+        ||Name||Description||Required||Default||Pattern||
+        |movie |pass an optional movie id to get comments only for specific movie |(x) | |  |
+
+
+
+
+
+    h4. Responses
+        *Status Code:* 200
+        *Message:*     search results matching criteria
+        {code:title=Response Type}
+array[Comment]
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "search results matching criteria",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/Comment"
+    }
+  }
+}
+        {code}
+        *Status Code:* 404
+        *Message:*     Movie not found!
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "Movie not found!"
+}
+        {code}
+        *Status Code:* 400
+        *Message:*     bad input parameter
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "bad input parameter"
+}
+        {code}
+    ----
+
+    h3. addMovie
+    {status:colour=Yellow|title=post|subtle=false}
+    {code}
+    post /movies
+    {code}
+    *Summary:* adds movies to database
+    *Description:* Adds movies to database
+
+
+    h4. Parameters
+
+        h5. Body Parameter
+        ||Name||Description||Required||Default||Pattern||
+        |title |Movie title to add - more informations will be fetched from OMDB API. |(x) | |  |
+
+
+
+
+
+
+
+    h4. Responses
+        *Status Code:* 201
+        *Message:*     item created
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "item created"
+}
+        {code}
+        *Status Code:* 400
+        *Message:*     invalid input, object invalid
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "invalid input, object invalid"
+}
+        {code}
+        *Status Code:* 409
+        *Message:*     an existing item already exists
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "an existing item already exists"
+}
+        {code}
+    ----
+
+    h3. findComments
+    {status:colour=Yellow|title=get|subtle=false}
+    {code}
+    get /comments
+    {code}
+    *Summary:* returns list of comments
+    *Description:* By calling this operation you can search for movies in the system. 
+
+
+    h4. Parameters
+
+
+
+        h5. Query Parameters
+        ||Name||Description||Required||Default||Pattern||
+        |movie |pass an optional movie id to get comments only for specific movie |(x) | |  |
+
+
+
+
+
+    h4. Responses
+        *Status Code:* 200
+        *Message:*     search results matching criteria
+        {code:title=Response Type}
+array[Comment]
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "search results matching criteria",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/Comment"
+    }
+  }
+}
+        {code}
+        *Status Code:* 404
+        *Message:*     Movie not found!
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "Movie not found!"
+}
+        {code}
+        *Status Code:* 400
+        *Message:*     bad input parameter
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "bad input parameter"
+}
+        {code}
+    ----
+
+    h3. findMovies
+    {status:colour=Yellow|title=get|subtle=false}
+    {code}
+    get /movies
+    {code}
+    *Summary:* searches for movies in database
+    *Description:* By calling this operation you can search for movies in the system. 
+
+
+    h4. Parameters
+
+
+
+        h5. Query Parameters
+        ||Name||Description||Required||Default||Pattern||
+        |id |Pass an optional movie id for looking up for specific movie. |(x) | |  |
+
+|search |This param can be used for searching. All words will be tested against movie title. |(x) | |  |
+
+|limit |maximum number of records to return |(x) | |  |
+
+
+
+
+
+    h4. Responses
+        *Status Code:* 200
+        *Message:*     search results matching criteria
+        {code:title=Response Type}
+array[Movie]
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "search results matching criteria",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/Movie"
+    }
+  }
+}
+        {code}
+        *Status Code:* 404
+        *Message:*     Movie not found!
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "Movie not found!"
+}
+        {code}
+        *Status Code:* 400
+        *Message:*     bad input parameter
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "bad input parameter"
+}
+        {code}
+    ----
+
+h2. Models
+
+        h3. Comment
+        ||Field Name||Required||Type||Description||
+         |movie | |String |movie is id of foreign movie table row id |
+ |body | |String |text content of the comment |
+        h3. Movie
+        ||Field Name||Required||Type||Description||
+         |id | |UUID | |
+ |Title | |String | |
+ |Year | |BigDecimal | |
+        h3. MovieQuery
+        ||Field Name||Required||Type||Description||
+         |Title | |String |Title of the movie you want add to database |
