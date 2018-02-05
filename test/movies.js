@@ -7,15 +7,17 @@ const config = require('../config');
 const MongoClient = require('mongodb').MongoClient;
 const Tools = require('./detail/tools');
 const should = chai.should();
+const DB = require('../lib/mongo');
 chai.use(chaiHttp);
 
 describe('API endpoints for movies', ()=>{
     let http, movies, db;
     before(async ()=>{
         http = chai.request.agent(app);
-        db = await MongoClient.connect(config.db.url);
+        db = await DB.connect();
         movies = db.collection('movies');
     });
+
 
     beforeEach(()=>{
         movies.remove({});
@@ -23,7 +25,7 @@ describe('API endpoints for movies', ()=>{
 
     after(()=>{
         http.app.close();
-        db.close();
+        DB.close();
     });
 
     describe('GET /movies', ()=>{

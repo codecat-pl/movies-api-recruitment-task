@@ -6,6 +6,7 @@ const config = require('../config');
 const MongoClient = require('mongodb').MongoClient;
 const Tools = require('./detail/tools');
 const should = chai.should();
+const DB = require('../lib/mongo');
 chai.use(chaiHttp);
 
 
@@ -13,10 +14,11 @@ describe('API endpoints for comments', ()=>{
     let http, movies, db, comments;
     before(async ()=>{
         http = chai.request.agent(app);
-        db = await MongoClient.connect(config.db.url);
+        db = await DB.connect();
         comments = db.collection('comments');
         movies = db.collection('movies');
     });
+
 
     beforeEach(()=>{
         comments.remove({});
@@ -30,7 +32,7 @@ describe('API endpoints for comments', ()=>{
 
     after(()=>{
         http.app.close();
-        db.close();
+        DB.close();
     });
 
     describe('GET /comments', ()=>{

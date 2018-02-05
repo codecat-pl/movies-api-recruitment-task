@@ -17,7 +17,7 @@ describe('Data access objects',()=>{
     let db, movies,comments;
 
     before(async ()=>{
-        db = await MongoClient.connect(config.db.url);
+        db = await DB.connect();
         movies = db.collection('movies');
         comments = db.collection('comments');
 
@@ -29,7 +29,7 @@ describe('Data access objects',()=>{
     });
 
     after(()=>{
-        db.close();
+        DB.close();
     });
 
     describe('Movies', ()=>{
@@ -110,6 +110,16 @@ describe('Data access objects',()=>{
             ret.length.should.equal(2);
         });
 
+        it('#find() should return all comments in chronological order', async ()=>{
+            await comments.insert({movie: 'qwe', body:"test", creation_date: 1});
+            await comments.insert({movie: 'asd', body:"test2", creation_date: 2});
+            await comments.insert({movie: 'zxc', body:"test2", creation_date: 3});
+            const ret = await Comments.find();
+            ret[0].should.have.property('movie', 'zxc');
+            ret[1].should.have.property('movie', 'asd');
+            ret[2].should.have.property('movie', 'qwe');
+        });
+
         it('#findByMovieId() should return empty array if movie don\'t have comments', async ()=>{
             await comments.insert({movie: 'asd', body:"test"});
             const ret = await Comments.findByMovieId('qwe');
@@ -124,6 +134,17 @@ describe('Data access objects',()=>{
             ret.should.be.an('array');
             ret.length.should.equal(2);
         });
+
+        it('#findByMovieId() should retur comments in chronological order', async ()=>{
+            await comments.insert({movie: 'qwe', body:"test0", creation_date: 1});
+            await comments.insert({movie: 'qwe', body:"test1", creation_date: 2});
+            await comments.insert({movie: 'qwe', body:"test2", creation_date: 3});
+            const ret = await Comments.findByMovieId('qwe');
+            ret[0].should.have.property('body', 'test2');
+            ret[1].should.have.property('body', 'test1');
+            ret[2].should.have.property('body', 'test0');
+        });
+
 
         it('#create() should throw if input object don\'t have movie property ', async ()=>{
             const err = await Tools.expectFail(()=>Comments.create({body: 'data'}));
