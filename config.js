@@ -8,7 +8,7 @@ const envs = {
     production:{
         db: {
             type: 'mongo',
-            url: process.env.DATABASE_URL
+            url: process.env.MONGODB_URI
         },
     },
 
