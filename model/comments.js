@@ -2,6 +2,7 @@ const DB = require('../lib/mongo');
 const {MovieAlreadyExistError, MovieNotFoundError} = require('../lib/errors');
 const {checkObject, checkString, checkId} = require('../lib/checkers');
 const Movies = require('./movies');
+
 module.exports = class MoviesModel{
     static async find(){
         const col = await this.getCollection('comments');
@@ -23,7 +24,7 @@ module.exports = class MoviesModel{
 
         const col = await this.getCollection('comments');
         const ret = await col.insert(comment);
-        comment.id = ret.insertedIds[0].toString();
+        comment.id = DB.getInsertedId(ret);
         return comment;
     }
 

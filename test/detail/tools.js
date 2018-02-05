@@ -6,3 +6,8 @@ exports.expectFail = async function expectFail(func){
         return Promise.resolve(err);
     }
 };
+
+
+exports.getInsertedId = function getInsertedId( ret ) {
+    return ret.insertedIds[0].toString();
+};

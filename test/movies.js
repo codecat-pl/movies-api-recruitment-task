@@ -33,8 +33,8 @@ describe('API endpoints for movies', ()=>{
         });
 
         it('should return list of all movies in database', async ()=>{
-            await movies.insert({Title: 'The Matrix'});
-            await movies.insert({Title: 'Back to the future'});
+            await createMovieInDB('The Matrix');
+            await createMovieInDB('Back to the Future');
             const res = await http.get('/movies');
             res.body.length.should.equal(2);
         });
@@ -132,7 +132,6 @@ describe('API endpoints for movies', ()=>{
                 .reply(200, {Response: "False", Error: "Movie not found!"});
         }
     });
-
 
     function createMovieInDB(title="The Matrix"){
         return movies.insert({Title: title, other: 'data'})

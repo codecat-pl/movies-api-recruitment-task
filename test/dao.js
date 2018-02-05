@@ -10,18 +10,19 @@ const DB = require('../lib/mongo');
 
 const MongoClient = require('mongodb').MongoClient;
 
-
 const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Data access objects',()=>{
     let db, movies,comments;
+
     before(async ()=>{
         db = await MongoClient.connect(config.db.url);
         movies = db.collection('movies');
         comments = db.collection('comments');
 
     });
+
     beforeEach(async ()=>{
         await movies.remove({});
         await comments.remove({});
@@ -30,6 +31,7 @@ describe('Data access objects',()=>{
     after(()=>{
         db.close();
     });
+
     describe('Movies', ()=>{
         it('#findOneByTitle() should return null if not exist in db', async ()=>{
             const ret = await Movies.findOneByTitle('NotExistingMovie');
@@ -48,8 +50,9 @@ describe('Data access objects',()=>{
         });
 
         it('#findOneById() should return object from db', async ()=>{
-            const a = await movies.insert({Title: 'The Matrix'});
-            const ret = await Movies.findOneById(a.insertedIds[0].toString());
+            const op = await movies.insert({Title: 'The Matrix'});
+            const movieId = Tools.getInsertedId(op);
+            const ret = await Movies.findOneById(movieId);
             ret.Title.should.be.equal('The Matrix');
         });
 
@@ -57,7 +60,6 @@ describe('Data access objects',()=>{
             const err = await Tools.expectFail(()=>Movies.findOneByTitle(132));
             err.message.should.be.equal("Invalid request: Invalid input data");
         });
-
 
         it('#create() should add movie to database', async ()=>{
             await Movies.create({Title: 'The Matrix'});
@@ -123,7 +125,6 @@ describe('Data access objects',()=>{
             ret.length.should.equal(2);
         });
 
-
         it('#create() should throw if input object don\'t have movie property ', async ()=>{
             const err = await Tools.expectFail(()=>Comments.create({body: 'data'}));
             err.message.should.be.equal("Invalid request: Invalid ID type");
@@ -141,15 +142,15 @@ describe('Data access objects',()=>{
 
         it('#create() should throw if movie not exist', async ()=>{
             const op = await movies.insert({Title: 'The Matrix'});
-            const movieId = op.insertedIds[0].toString();
+            const movieId = Tools.getInsertedId(op);
             await movies.remove({});
             const err = await Tools.expectFail(()=>Comments.create({movie: movieId, body: 'text'}));
             err.message.should.be.equal("Movie not found!");
         });
 
         it('#create() should add object to database', async ()=>{
-            const a = await movies.insert({Title: 'The Matrix'});
-            const movieId = a.insertedIds[0].toString();
+            const op = await movies.insert({Title: 'The Matrix'});
+            const movieId = Tools.getInsertedId(op);
             const ret = await Comments.create({movie: movieId, body: 'text'});
             ret.should.include({movie: movieId, body: 'text'});
         });

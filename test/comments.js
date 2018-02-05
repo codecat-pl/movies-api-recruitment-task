@@ -8,6 +8,7 @@ const Tools = require('./detail/tools');
 const should = chai.should();
 chai.use(chaiHttp);
 
+
 describe('API endpoints for comments', ()=>{
     let http, movies, db, comments;
     before(async ()=>{
@@ -44,17 +45,17 @@ describe('API endpoints for comments', ()=>{
         });
 
         it('should return all comments from database', async ()=>{
-            await comments.insert({movie: 'asd', body: 'data'});
-            await comments.insert({movie: 'qwe', body: 'data2'});
+            await createCommentInDb('asd', 'text1');
+            await createCommentInDb('qwe', 'text2');
             const res = await http.get('/comments');
             res.body.should.be.an('array');
             res.body.length.should.equal(2);
         });
 
         it('movie query should return all comments for movie from database', async ()=>{
-            await comments.insert({movie: 'asd', body: 'data'});
-            await comments.insert({movie: 'qwe', body: 'data2'});
-            await comments.insert({movie: 'qwe', body: 'data3'});
+            await createCommentInDb('asd', 'text1');
+            await createCommentInDb('qwe', 'text2');
+            await createCommentInDb('qwe', 'text3');
             const res = await http.get('/comments').query({movie: 'qwe'});
             res.body.should.be.an('array');
             res.body.length.should.equal(2);
@@ -67,7 +68,7 @@ describe('API endpoints for comments', ()=>{
 
         beforeEach(async ()=>{
             const ret = await movies.insert({Title: 'The Matrix', other: 'data'});
-            movieId = ret.insertedIds[0].toString();
+            movieId = Tools.getInsertedId(ret);
         });
 
         afterEach(()=>{
@@ -102,5 +103,10 @@ describe('API endpoints for comments', ()=>{
             err.response.body.Error.should.equal("Invalid request: Invalid ID type");
         });
     });
+
+    function createCommentInDb(movie, body){
+        return comments.insert({movie: movie, body: body});
+    }
 });
+
 
