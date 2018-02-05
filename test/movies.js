@@ -16,8 +16,12 @@ describe('API endpoints for movies', ()=>{
         movies = db.collection('movies');
     });
 
-    beforeEach(()=>{
-        movies.remove({});
+    beforeEach(async ()=>{
+        await movies.remove({});
+    });
+
+    afterEach(async ()=>{
+        await movies.remove({});
     });
 
     after(()=>{
@@ -164,10 +168,11 @@ describe('API endpoints for movies', ()=>{
             apiRequest.done();
         });
 
-        it('post title should return data from omdbapi', async ()=>{
+        it('post title should return data from omdbapi with local id', async ()=>{
             mockApiRequestMatrix();
             const res = await requestPostMovies();
             res.body.should.have.property('other', 'data');
+            res.body.should.have.property('id');
         });
 
         it('post if title not exist should return error ', async ()=>{
@@ -188,11 +193,12 @@ describe('API endpoints for movies', ()=>{
             err.response.body.Error.should.be.equal('Movie not found!')
         });
 
-        it('post should return data from database if exist (not omdbapi)', async ()=>{
+        it('post should return data (with id) from database if exist (not omdbapi)', async ()=>{
             await createMovieInDB();
             const res = await requestPostMovies();
             res.should.have.status(200);
             res.body.should.have.property('Title', 'The Matrix');
+            res.body.should.have.property('id');
         });
 
         it('post should return data from database if exist but with id', async ()=>{

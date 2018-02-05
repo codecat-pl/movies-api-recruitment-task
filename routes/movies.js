@@ -35,6 +35,7 @@ function checkIfExist(name, body){
 
 async function fatchFromOmdbAndSave(title){
     const data = await OMDB.findMovie(title);
-    await Movies.create(data);
-    return data;
+    const id = Movies.create(data);
+    return Object.assign({}, data, {id});
 }
+

@@ -1,3 +1,4 @@
+process.env.PORT = 0;
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const Movies = require('../model/movies');

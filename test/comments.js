@@ -6,7 +6,6 @@ const Tools = require('./detail/tools');
 const DB = require('../lib/mongo');
 chai.use(chaiHttp);
 
-
 describe('API endpoints for comments', ()=>{
     let http, movies, db, comments;
     before(async ()=>{
@@ -16,15 +15,14 @@ describe('API endpoints for comments', ()=>{
         movies = db.collection('movies');
     });
 
-
-    beforeEach(()=>{
-        comments.remove({});
-        movies.remove({});
+    beforeEach(async ()=>{
+        await comments.remove({});
+        await movies.remove({});
     });
 
-    afterEach(()=>{
-        comments.remove({});
-        movies.remove({});
+    afterEach(async ()=>{
+        await comments.remove({});
+        await movies.remove({});
     });
 
     after(()=>{

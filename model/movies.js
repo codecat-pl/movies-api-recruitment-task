@@ -85,7 +85,8 @@ module.exports = class MoviesModel{
 
         const col = await this.getMoviesCollection();
         try{
-            await col.insert(data);
+            const ret = await col.insert(data);
+            return DB.getInsertedId(ret);
         }catch(err){
             throw new MovieAlreadyExistError()
         }
