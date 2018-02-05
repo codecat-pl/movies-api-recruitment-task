@@ -6,7 +6,8 @@
   "scripts": {
     "install": "db-migrate up",
     "start": "node app.js",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "nyc mocha"
   },
   "author": "Mateusz Russak",
   "license": "MIT",

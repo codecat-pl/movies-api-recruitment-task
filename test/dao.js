@@ -1,14 +1,9 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const nock = require('nock');
-const app = require('../app');
-const config = require('../config');
 const Movies = require('../model/movies');
 const Comments = require('../model/comments');
 const Tools = require('./detail/tools');
 const DB = require('../lib/mongo');
-
-const MongoClient = require('mongodb').MongoClient;
 
 const should = chai.should();
 chai.use(chaiHttp);

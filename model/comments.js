@@ -3,7 +3,7 @@ const {MovieAlreadyExistError, MovieNotFoundError} = require('../lib/errors');
 const {checkObject, checkString, checkId} = require('../lib/checkers');
 const Movies = require('./movies');
 
-module.exports = class MoviesModel{
+module.exports = class CommentsModel{
     static async find(){
         const col = await this.getCollection('comments');
         return await col.find({}).sort({creation_date: -1}).toArray();
@@ -22,7 +22,7 @@ module.exports = class MoviesModel{
         if(!movie)
             throw new MovieNotFoundError();
 
-        comment.creation_date = Date.now()
+        comment.creation_date = Date.now();
 
         const col = await this.getCollection('comments');
         const ret = await col.insert(comment);

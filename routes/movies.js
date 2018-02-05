@@ -10,18 +10,27 @@ module.exports = router;
 
 
 async function getMovies(req, res){
-    const movies = await Movies.find();
+    const movies = await Movies.find(req.query);
     res.json(movies);
 }
 
 async function createMovieEntry(req, res){
-    if(!req.body || !req.body.Title) throw new MissingApiParameterError();
-    const movieTitle = req.body.Title;
-    let movieData = await Movies.findOneByTitle(movieTitle);
-    if(!movieData){
-        movieData = await fatchFromOmdbAndSave(movieTitle);
-    }
+    checkIfExist('Title', req.body);
+    const movieData = await findOrFetchMovie(req.body.Title);
     res.json(movieData);
+}
+
+async function findOrFetchMovie(movieTitle){
+    const movieData = await Movies.findOneByTitle(movieTitle);
+    if(!movieData) {
+        return await fatchFromOmdbAndSave(movieTitle);
+    }
+    return movieData;
+}
+
+function checkIfExist(name, body){
+    if(!body || !body[name])
+        throw new MissingApiParameterError();
 }
 
 async function fatchFromOmdbAndSave(title){

@@ -2,10 +2,7 @@ process.env.PORT = 0;
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
-const config = require('../config');
-const MongoClient = require('mongodb').MongoClient;
 const Tools = require('./detail/tools');
-const should = chai.should();
 const DB = require('../lib/mongo');
 chai.use(chaiHttp);
 

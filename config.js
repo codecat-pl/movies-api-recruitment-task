@@ -6,8 +6,10 @@ const common = {
 
 const envs = {
     production:{
-        db: 'mongo',
-        url: process.env.DATABASE_URL
+        db: {
+            type: 'mongo',
+            url: process.env.DATABASE_URL
+        },
     },
 
     development: {

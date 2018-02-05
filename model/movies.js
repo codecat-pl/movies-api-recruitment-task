@@ -2,10 +2,65 @@ const DB = require('../lib/mongo');
 const {MovieAlreadyExistError} = require('../lib/errors');
 const {checkObject, checkString,checkId} = require('../lib/checkers');
 
+class MongoQueryBuilder{
+    constructor(){
+        this.query = {};
+        this.sortQuery = null;
+    }
+
+    byId(id){
+        this.query = {_id: DB.Id(id)};
+    }
+
+    search(field, query){
+        if(!this.query['$and']){
+            this.query['$and'] = [];
+        }
+        query.split(' ').map(word=>({
+            [field]: {
+                "$regex": ".*"+word+".*",
+                '$options' : 'i'
+            }
+        })).forEach(exp=>{
+            this.query['$and'].push(exp);
+        })
+    }
+
+    sort(query) {
+        this.sortQuery = {};
+        Object.keys(query).forEach(key=>{
+            if(this.constructor.isSortValue(query[key])){
+                this.sortQuery[key] = query[key]==='asc'?1:-1;
+            }
+        })
+    }
+
+
+    exec(col){
+        const cursor = col.find(this.query);
+        if(this.sort) cursor.sort(this.sortQuery);
+        return cursor.toArray();
+    }
+
+    static isSortValue(val){
+        return ~['asc', 'desc'].indexOf(val);
+    }
+}
+
 module.exports = class MoviesModel{
-    static async find(){
+    static async find({id, search, sort}={}){
+        if(id) checkId(id);
+        if(search) checkString(search);
+        if(sort) checkObject(sort);
+
         const col = await this.getMoviesCollection();
-        const data = await col.find({}).toArray();
+        const query = new MongoQueryBuilder();
+        if(id) query.byId(id);
+        else {
+            if (search) query.search('Title', search);
+            if (sort) query.sort(sort);
+        }
+        const data = await query.exec(col);
         return this.serialize(data);
     }
 

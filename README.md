@@ -4,6 +4,10 @@
 Demo can be found [here](http://moviesapi.codecat.pl/).
 Documentation [here](https://app.swaggerhub.com/apis/CodeCat/MoviesAPI/1.0.0).
 
+### Requirements
+* mongodb >= v2.6
+* node.js >= v8.9
+
 ### Setup
 To setup and run application:
 
@@ -19,6 +23,5 @@ npm test
 ```
 Or for code coverage:
 ```bash
-nyc npm test
-nyc report
+npm run coverage
 ```

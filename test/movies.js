@@ -4,9 +4,7 @@ const chaiHttp = require('chai-http');
 const nock = require('nock');
 const app = require('../app');
 const config = require('../config');
-const MongoClient = require('mongodb').MongoClient;
 const Tools = require('./detail/tools');
-const should = chai.should();
 const DB = require('../lib/mongo');
 chai.use(chaiHttp);
 
@@ -18,7 +16,6 @@ describe('API endpoints for movies', ()=>{
         movies = db.collection('movies');
     });
 
-
     beforeEach(()=>{
         movies.remove({});
     });
@@ -29,26 +26,111 @@ describe('API endpoints for movies', ()=>{
     });
 
     describe('GET /movies', ()=>{
-        it('get status 200', async ()=>{
+        it('should return status 200', async ()=>{
             const res = await http.get('/movies');
             res.should.have.status(200);
         });
 
-        it('should return list of all movies in database', async ()=>{
-            await createMovieInDB('The Matrix');
-            await createMovieInDB('Back to the Future');
+        it('should return empty list if no movies in database', async ()=>{
             const res = await http.get('/movies');
+            res.body.should.be.an('array').that.is.empty;
+        });
+
+        it('should return list of movies from database with ids', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies');
+            res.body.length.should.equal(4);
+            res.body[0].should.have.property('id');
+            res.body[3].should.have.property('id');
+        });
+
+        it('should return empty array if no movie match to search parameter', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({search: "Fiction"});
+            res.body.should.be.an('array').that.is.empty;
+        });
+
+        it('should return movies that match to search parameter', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({search: "Future"});
             res.body.length.should.equal(2);
         });
 
-        it('get should return data array from database but with id', async ()=>{
-            await createMovieInDB('The Matrix');
-            await createMovieInDB('Back to the Future');
-            const res = await http.get('/movies');
-            res.body[0].should.have.property('id');
-            res.body[1].should.have.property('id');
+        it('should return movies that match to search parameter with 2 ordered words', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({search: "Back Future"});
+            res.body.length.should.equal(2);
         });
 
+        it('should return movies that match to search parameter with 2 unordered words', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({search: "Future Back"});
+            res.body.length.should.equal(2);
+        });
+
+        it('should return movies that match to search parameter with case insensitivity', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({search: "back future"});
+            res.body.length.should.equal(2);
+        });
+
+        it('should return movies that match to search parameter with case insensitivity', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({search: "back future"});
+            res.body.length.should.equal(2);
+        });
+
+        it('should return list of movies sorted by title in ascending order if parameter sort[Title] is set to asc', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({sort:{Title: 'asc'}});
+            res.body[0].Title.should.equal('Back to Burgundy');
+            res.body[3].Title.should.equal('The Matrix');
+        });
+
+        it('should return list of movies sorted by title in descending order if parameter sort[Title] is set to desc', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({sort:{Title: 'desc'}});
+            res.body[0].Title.should.equal('The Matrix');
+            res.body[3].Title.should.equal('Back to Burgundy');
+        });
+
+        it('should return list of movies sorted by year in ascending order if parameter sort[Year] is set to asc', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({sort:{Year: 'asc'}});
+            res.body[0].Title.should.equal('Back to the Future');
+            res.body[3].Title.should.equal('Back to Burgundy');
+        });
+
+        it('should return list of movies sorted by year in descending order if parameter sort[Year] is set to desc', async ()=>{
+            await createExampleMovies();
+            const res = await http.get('/movies').query({sort:{Year: 'desc'}});
+            res.body[0].Title.should.equal('Back to Burgundy');
+            res.body[3].Title.should.equal('Back to the Future');
+        });
+
+        it('should return movie according to id parameter', async ()=>{
+            const ret = await createMovieInDB('Pulp Fiction');
+            const movieId = Tools.getInsertedId(ret);
+            await createExampleMovies();
+            const res = await http.get('/movies').query({id: movieId});
+            res.body.length.should.equal(1);
+            res.body[0].Title.should.equal('Pulp Fiction')
+        });
+
+        it('should return movie according to id parameter', async ()=>{
+            const ret = await createMovieInDB('The Matrix');
+            const movieId = Tools.getInsertedId(ret);
+            const res = await http.get('/movies').query({id: movieId});
+            res.body.length.should.equal(1);
+            res.body[0].Title.should.equal('The Matrix')
+        });
+
+        async function createExampleMovies() {
+            await createMovieInDB('The Matrix', 1999);
+            await createMovieInDB('Back to the Future', 1985);
+            await createMovieInDB('Back to the Future 2', 1989);
+            await createMovieInDB('Back to Burgundy', 2017);
+        }
     });
 
     describe('POST /movies', ()=>{
@@ -113,7 +195,6 @@ describe('API endpoints for movies', ()=>{
             res.body.should.have.property('id');
         });
 
-
         function requestPostMovies(query){
             return http
                 .post('/movies')
@@ -135,8 +216,8 @@ describe('API endpoints for movies', ()=>{
         }
     });
 
-    function createMovieInDB(title="The Matrix"){
-        return movies.insert({Title: title, other: 'data'})
+    function createMovieInDB(title="The Matrix", year=1999){
+        return movies.insert({Title: title, other: 'data', Year: year})
     }
 
 });
