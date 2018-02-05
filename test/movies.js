@@ -29,10 +29,12 @@ describe('API endpoints for movies', ()=>{
         DB.close();
     });
 
-    describe('GET /', async ()=>{
-        const res = await http.get('/');
-        res.should.have.status(200);
-        res.body.should.equal("<a href='https://github.com/codecat-pl/movies-api-recruitment-task'>Visit github for more info</a>");
+    describe('GET /', ()=>{
+        it('should return github link', async ()=>{
+            const res = await http.get('/');
+            res.should.have.status(200);
+            res.text.should.equal("<a href='https://github.com/codecat-pl/movies-api-recruitment-task'>Visit github for more info</a>");
+        });
     });
 
     describe('GET /movies', ()=>{
