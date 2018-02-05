@@ -1,3 +1,4 @@
+process.env.PORT = 0;
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const nock = require('nock');
@@ -8,10 +9,10 @@ const Tools = require('./detail/tools');
 const should = chai.should();
 chai.use(chaiHttp);
 
-describe('API endpoints', ()=>{
-    let agent, movies, db;
+describe('API endpoints for movies', ()=>{
+    let http, movies, db;
     before(async ()=>{
-        agent = chai.request.agent(app);
+        http = chai.request.agent(app);
         db = await MongoClient.connect(config.db.url);
         movies = db.collection('movies');
     });
@@ -21,34 +22,31 @@ describe('API endpoints', ()=>{
     });
 
     after(()=>{
-        agent.app.close();
+        http.app.close();
         db.close();
     });
 
     describe('GET /movies', ()=>{
         it('get status 200', async ()=>{
-            const res = await requestGetMovies();
+            const res = await http.get('/movies');
             res.should.have.status(200);
         });
 
         it('should return list of all movies in database', async ()=>{
             await movies.insert({Title: 'The Matrix'});
             await movies.insert({Title: 'Back to the future'});
-            const res = await requestGetMovies();
+            const res = await http.get('/movies');
             res.body.length.should.equal(2);
         });
 
-        it('should return list of all movies in database', async ()=>{
-            await movies.insert({Title: 'The Matrix'});
-            await movies.insert({Title: 'Back to the future'});
-            const res = await requestGetMovies();
-            res.body.length.should.equal(2);
+        it('get should return data array from database but with id', async ()=>{
+            await createMovieInDB('The Matrix');
+            await createMovieInDB('Back to the Future');
+            const res = await http.get('/movies');
+            res.body[0].should.have.property('id');
+            res.body[1].should.have.property('id');
         });
 
-        async function requestGetMovies(){
-            return await agent
-                .get('/movies');
-        }
     });
 
     describe('POST /movies', ()=>{
@@ -107,13 +105,15 @@ describe('API endpoints', ()=>{
             res.body.should.have.property('Title', 'The Matrix');
         });
 
+        it('post should return data from database if exist but with id', async ()=>{
+            await createMovieInDB();
+            const res = await requestPostMovies();
+            res.body.should.have.property('id');
+        });
 
-        function createMovieInDB(){
-            return movies.insert({Title: 'The Matrix', other: 'data'})
-        }
 
         function requestPostMovies(query){
-            return agent
+            return http
                 .post('/movies')
                 .send(query || {Title: 'The Matrix'});
         }
@@ -132,6 +132,11 @@ describe('API endpoints', ()=>{
                 .reply(200, {Response: "False", Error: "Movie not found!"});
         }
     });
+
+
+    function createMovieInDB(title="The Matrix"){
+        return movies.insert({Title: title, other: 'data'})
+    }
 
 });
 

@@ -7,7 +7,7 @@ const common = {
 const envs = {
     production:{
         db: 'mongo',
-        url: process.env.MONGODB_URI
+        url: process.env.DATABASE_URL
     },
 
     development: {
