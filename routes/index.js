@@ -11,7 +11,7 @@ module.exports = router;
 
 
 function handleErrors(err, req, res, next){
-    console.error(err);
+    //console.error(err);
     debug(err);
     res.status(err.statusCode || 500)
         .json({Error: err.message});
