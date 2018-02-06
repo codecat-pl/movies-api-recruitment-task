@@ -31,9 +31,9 @@ h2. Endpoints
 
     h4. Responses
         *Status Code:* 200
-        *Message:*     search results matching criteria
+        *Message:*     comment that was added to database
         {code:title=Response Type}
-array[Comment]
+Comment
         {code}
         See [#models]
 
@@ -41,12 +41,9 @@ array[Comment]
 
         {code:title=Response Schema |collapse=true}
 {
-  "description" : "search results matching criteria",
+  "description" : "comment that was added to database",
   "schema" : {
-    "type" : "array",
-    "items" : {
-      "$ref" : "#/definitions/Comment"
-    }
+    "$ref" : "#/definitions/Comment"
   }
 }
         {code}
@@ -65,7 +62,7 @@ array[Comment]
 }
         {code}
         *Status Code:* 400
-        *Message:*     bad input parameter
+        *Message:*     Invalid request
         {code:title=Response Type}
 
         {code}
@@ -75,7 +72,7 @@ array[Comment]
 
         {code:title=Response Schema |collapse=true}
 {
-  "description" : "bad input parameter"
+  "description" : "Invalid request"
 }
         {code}
     ----
@@ -102,7 +99,7 @@ array[Comment]
 
 
     h4. Responses
-        *Status Code:* 201
+        *Status Code:* 200
         *Message:*     created object filled with data from omdb
         {code:title=Response Type}
 
@@ -116,8 +113,8 @@ array[Comment]
   "description" : "created object filled with data from omdb"
 }
         {code}
-        *Status Code:* 400
-        *Message:*     invalid input, object invalid
+        *Status Code:* 404
+        *Message:*     Movie not found!
         {code:title=Response Type}
 
         {code}
@@ -127,11 +124,25 @@ array[Comment]
 
         {code:title=Response Schema |collapse=true}
 {
-  "description" : "invalid input, object invalid"
+  "description" : "Movie not found!"
+}
+        {code}
+        *Status Code:* 400
+        *Message:*     Invalid request
+        {code:title=Response Type}
+
+        {code}
+        See [#models]
+
+
+
+        {code:title=Response Schema |collapse=true}
+{
+  "description" : "Invalid request"
 }
         {code}
         *Status Code:* 409
-        *Message:*     an existing item already exists
+        *Message:*     Movie already exist!
         {code:title=Response Type}
 
         {code}
@@ -141,7 +152,7 @@ array[Comment]
 
         {code:title=Response Schema |collapse=true}
 {
-  "description" : "an existing item already exists"
+  "description" : "Movie already exist!"
 }
         {code}
     ----
@@ -188,34 +199,6 @@ array[Comment]
   }
 }
         {code}
-        *Status Code:* 404
-        *Message:*     Movie not found!
-        {code:title=Response Type}
-
-        {code}
-        See [#models]
-
-
-
-        {code:title=Response Schema |collapse=true}
-{
-  "description" : "Movie not found!"
-}
-        {code}
-        *Status Code:* 400
-        *Message:*     bad input parameter
-        {code:title=Response Type}
-
-        {code}
-        See [#models]
-
-
-
-        {code:title=Response Schema |collapse=true}
-{
-  "description" : "bad input parameter"
-}
-        {code}
     ----
 
     h3. findMovies
@@ -260,20 +243,6 @@ array[Comment]
   "description" : "search results matching criteria"
 }
         {code}
-        *Status Code:* 404
-        *Message:*     Movie not found!
-        {code:title=Response Type}
-
-        {code}
-        See [#models]
-
-
-
-        {code:title=Response Schema |collapse=true}
-{
-  "description" : "Movie not found!"
-}
-        {code}
         *Status Code:* 400
         *Message:*     bad input parameter
         {code:title=Response Type}
@@ -296,11 +265,6 @@ h2. Models
         ||Field Name||Required||Type||Description||
          |movie | |String |ID of Movie where comment will be attached |
  |body | |String |Comment about the movie |
-        h3. Movie
-        ||Field Name||Required||Type||Description||
-         |id | |UUID | |
- |Title | |String | |
- |Year | |BigDecimal | |
         h3. MovieCreationQuery
         ||Field Name||Required||Type||Description||
          |Title | |String |Title of the movie you want add to database |
