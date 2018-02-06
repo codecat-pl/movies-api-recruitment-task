@@ -1,10 +1,10 @@
 process.env.PORT = 0;
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const Movies = require('../model/movies');
-const Comments = require('../model/comments');
+const Movies = require('../db').model('movies');
+const Comments = require('../db').model('comments');
 const Tools = require('./detail/tools');
-const DB = require('../lib/mongo');
+const DB = require('../db/index');
 
 const should = chai.should();
 chai.use(chaiHttp);
@@ -24,8 +24,8 @@ describe('Data access objects',()=>{
         await comments.remove({});
     });
 
-    after(()=>{
-        DB.close();
+    after(async ()=>{
+        await DB.close();
     });
 
     describe('Movies', ()=>{

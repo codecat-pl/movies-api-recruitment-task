@@ -5,7 +5,7 @@ const nock = require('nock');
 const app = require('../app');
 const config = require('../config');
 const Tools = require('./detail/tools');
-const DB = require('../lib/mongo');
+const DB = require('../db/index');
 chai.use(chaiHttp);
 
 describe('API endpoints for movies', ()=>{
@@ -24,9 +24,9 @@ describe('API endpoints for movies', ()=>{
         await movies.remove({});
     });
 
-    after(()=>{
-        http.app.close();
-        DB.close();
+    after(async ()=>{
+        await http.app.close();
+        await DB.close();
     });
 
     describe('GET /', ()=>{

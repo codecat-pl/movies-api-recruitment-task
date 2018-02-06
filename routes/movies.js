@@ -1,7 +1,7 @@
 const Router = require('express-promise-router');
 const {MovieNotFoundError, MissingApiParameterError} = require('../lib/errors');
 const OMDB = require('../lib/omdb');
-const Movies = require('../model/movies');
+const Movies = require('../db').model('movies');
 
 const router = Router();
 router.get('/', getMovies);
@@ -35,7 +35,7 @@ function checkIfExist(name, body){
 
 async function fatchFromOmdbAndSave(title){
     const data = await OMDB.findMovie(title);
-    const id = Movies.create(data);
-    return Object.assign({}, data, {id});
+    const movie = Movies.create(data);
+    return movie;
 }
 

@@ -3,7 +3,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 const Tools = require('./detail/tools');
-const DB = require('../lib/mongo');
+const DB = require('../db/index');
 chai.use(chaiHttp);
 
 describe('API endpoints for comments', ()=>{
@@ -25,9 +25,9 @@ describe('API endpoints for comments', ()=>{
         await movies.remove({});
     });
 
-    after(()=>{
-        http.app.close();
-        DB.close();
+    after(async ()=>{
+        await http.app.close();
+        await DB.close();
     });
 
     describe('GET /comments', ()=>{

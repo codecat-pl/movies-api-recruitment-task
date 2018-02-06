@@ -1,8 +1,8 @@
-const config = require('../config');
+const config = require('../../config');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 
-module.exports = new (class MongoConnector{
+module.exports = class MongoConnector{
     constructor(){
         this.db = null;
     }
@@ -10,7 +10,7 @@ module.exports = new (class MongoConnector{
         if (!this.db) {
             this.db = await MongoClient.connect(config.db.url);
         }
-        return Promise.resolve(this.db);
+        return this.db;
     }
 
     get Id(){
@@ -20,10 +20,14 @@ module.exports = new (class MongoConnector{
     async close(){
         const db = this.db;
         this.db = null;
-        if(db) await db.close();
+        if(db) return await db.close();
     }
 
     getInsertedId(ret){
         return ret.insertedIds[0].toString();
     }
-})();
+
+    model(name){
+        return require('./models/'+name);
+    }
+};

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const routes = require('./routes');
-const DB = require('./lib/mongo');
+const DB = require('./db/index');
 
 const app = express();
 const port = config.port || 8000;

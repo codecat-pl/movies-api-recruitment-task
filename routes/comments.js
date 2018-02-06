@@ -1,7 +1,5 @@
 const Router = require('express-promise-router');
-const {MovieNotFoundError, MissingApiParameterError} = require('../lib/errors');
-const Movies = require('../model/movies');
-const Comments = require('../model/comments');
+const Comments = require('../db').model('comments');
 
 const router = Router();
 
