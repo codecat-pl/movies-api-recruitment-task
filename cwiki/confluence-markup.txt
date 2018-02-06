@@ -14,16 +14,16 @@ h2. Endpoints
     post /comments
     {code}
     *Summary:* puts comment into database
-    *Description:* By calling this operation you can search for movies in the system. 
+    *Description:* By calling this operation you can create new comments. 
 
 
     h4. Parameters
 
-
-
-        h5. Query Parameters
+        h5. Body Parameter
         ||Name||Description||Required||Default||Pattern||
-        |movie |pass an optional movie id to get comments only for specific movie |(x) | |  |
+        |movie |movie id to get comments only for specific movie |(x) | |  |
+
+
 
 
 
@@ -152,7 +152,7 @@ array[Comment]
     get /comments
     {code}
     *Summary:* returns list of comments
-    *Description:* By calling this operation you can search for movies in the system. 
+    *Description:* This operation returns comments in system in chronological order. 
 
 
     h4. Parameters
@@ -237,7 +237,9 @@ array[Comment]
 
 |search |This param can be used for searching. All words will be tested against movie title. |(x) | |  |
 
-|limit |maximum number of records to return |(x) | |  |
+|sort[Title] |sort results by title |(x) | |  |
+
+|sort[Year] |sort results by year |(x) | |  |
 
 
 
@@ -247,7 +249,7 @@ array[Comment]
         *Status Code:* 200
         *Message:*     search results matching criteria
         {code:title=Response Type}
-array[Movie]
+
         {code}
         See [#models]
 
@@ -255,13 +257,7 @@ array[Movie]
 
         {code:title=Response Schema |collapse=true}
 {
-  "description" : "search results matching criteria",
-  "schema" : {
-    "type" : "array",
-    "items" : {
-      "$ref" : "#/definitions/Movie"
-    }
-  }
+  "description" : "search results matching criteria"
 }
         {code}
         *Status Code:* 404
@@ -298,13 +294,13 @@ h2. Models
 
         h3. Comment
         ||Field Name||Required||Type||Description||
-         |movie | |String |movie is id of foreign movie table row id |
- |body | |String |text content of the comment |
+         |movie | |String |ID of Movie where comment will be attached |
+ |body | |String |Comment about the movie |
         h3. Movie
         ||Field Name||Required||Type||Description||
          |id | |UUID | |
  |Title | |String | |
  |Year | |BigDecimal | |
-        h3. MovieQuery
+        h3. MovieCreationQuery
         ||Field Name||Required||Type||Description||
          |Title | |String |Title of the movie you want add to database |
