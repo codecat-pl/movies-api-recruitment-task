@@ -6,6 +6,8 @@ const app = require('../app');
 const config = require('../config');
 const Tools = require('./detail/tools');
 const DB = require('../db/index');
+const fs = require('fs');
+const path = require('path');
 chai.use(chaiHttp);
 
 describe('API endpoints for movies', ()=>{
@@ -30,10 +32,10 @@ describe('API endpoints for movies', ()=>{
     });
 
     describe('GET /', ()=>{
-        it('should return github link', async ()=>{
+        it('should return index.html', async ()=>{
             const res = await http.get('/');
             res.should.have.status(200);
-            res.text.should.equal("<a href='https://github.com/codecat-pl/movies-api-recruitment-task'>Visit github for more info</a>");
+            res.text.should.equal(fs.readFileSync(path.join(__dirname, '../public/index.html')).toString());
         });
     });
 
