@@ -156,64 +156,58 @@ describe('API endpoints for movies', ()=>{
             nock.cleanAll();
         });
 
-        it('post of title should return object with title', async ()=>{
+        it('should return status 200 when title is send', async ()=>{
             mockApiRequestMatrix();
-            const res = await requestPostMovies();
+            const res = await http.post('/movies').send({Title: 'The Matrix'});
             res.should.have.status(200);
             res.body.should.have.property('Title', 'The Matrix');
         });
 
-        it('when posting the title server should query omdbapi.com', async ()=>{
+        it('should query omdbapi.com and answer with result when posting the title to server ', async ()=>{
             const apiRequest = mockApiRequestMatrix();
-            const res = await requestPostMovies();
+            const res = await http.post('/movies').send({Title: 'The Matrix'});
             res.should.have.status(200);
             apiRequest.done();
         });
 
-        it('post title should return data from omdbapi with local id', async ()=>{
+        it('should return data from omdbapi with local id', async ()=>{
             mockApiRequestMatrix();
-            const res = await requestPostMovies();
+            const res = await http.post('/movies').send({Title: 'The Matrix'});
             res.body.should.have.property('other', 'data');
             res.body.should.have.property('id');
         });
 
-        it('post if title not exist should return error ', async ()=>{
+        it('should throw error when title not exist', async ()=>{
             const err = await Tools.expectFail(()=>{
-                return requestPostMovies({})
+                return http.post('/movies').send({other: 'param'});
             });
             err.should.have.status(400);
             err.response.body.Error.should.be.equal('Invalid request: Missing parameter')
         });
 
-        it('post title not found by omdbapi', async ()=>{
+        it('should return error when title is not found in omdbapi', async ()=>{
             const apiRequest = mockApiRequestNotFound();
             const err = await Tools.expectFail(()=>{
-                return requestPostMovies({Title: 'SomeNotExistingMovie'})
+                return http.post('/movies').send({Title: 'SomeNotExistingMovie'});
             });
             apiRequest.done();
             err.should.have.status(404);
             err.response.body.Error.should.be.equal('Movie not found!')
         });
 
-        it('post should return data (with id) from database if exist (not omdbapi)', async ()=>{
+        it('should return data from database when title already exist', async ()=>{
             await createMovieInDB();
-            const res = await requestPostMovies();
+            const res = await http.post('/movies').send({Title: 'The Matrix'});
             res.should.have.status(200);
             res.body.should.have.property('Title', 'The Matrix');
             res.body.should.have.property('id');
         });
 
-        it('post should return data from database if exist but with id', async ()=>{
+        it('should return data with id when title already exist', async ()=>{
             await createMovieInDB();
-            const res = await requestPostMovies();
+            const res = await http.post('/movies').send({Title: 'The Matrix'});
             res.body.should.have.property('id');
         });
-
-        function requestPostMovies(query){
-            return http
-                .post('/movies')
-                .send(query || {Title: 'The Matrix'});
-        }
 
         function mockApiRequestMatrix() {
             return nock('http://www.omdbapi.com/')

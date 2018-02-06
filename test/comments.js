@@ -31,7 +31,7 @@ describe('API endpoints for comments', ()=>{
     });
 
     describe('GET /comments', ()=>{
-        it('get status 200', async ()=>{
+        it('should return status 200', async ()=>{
             const res = await http.get('/comments');
             res.should.have.status(200);
         });
@@ -49,7 +49,7 @@ describe('API endpoints for comments', ()=>{
             res.body.length.should.equal(2);
         });
 
-        it('movie query should return all comments for movie from database', async ()=>{
+        it('should return all comments from database for movie specified in query', async ()=>{
             await createCommentInDb('asd', 'text1');
             await createCommentInDb('qwe', 'text2');
             await createCommentInDb('qwe', 'text3');

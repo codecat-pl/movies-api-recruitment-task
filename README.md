@@ -1,8 +1,9 @@
 # MoviesAPI - recruitment task
 ![TravisCI status](https://travis-ci.org/codecat-pl/movies-api-recruitment-task.svg?branch=master)
 
-Demo can be found [here](http://moviesapi.codecat.pl/).
-Documentation [here](https://app.swaggerhub.com/apis/CodeCat/MoviesAPI/1.0.0).
+Public api can be found here: http://moviesapi.codecat.pl/
+
+Please read [documentation](https://app.swaggerhub.com/apis/CodeCat/MoviesAPI/1.0.0).
 
 ### Requirements
 * mongodb >= v2.6
