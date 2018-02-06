@@ -103,7 +103,7 @@ array[Comment]
 
     h4. Responses
         *Status Code:* 201
-        *Message:*     item created
+        *Message:*     created object filled with data from omdb
         {code:title=Response Type}
 
         {code}
@@ -113,7 +113,7 @@ array[Comment]
 
         {code:title=Response Schema |collapse=true}
 {
-  "description" : "item created"
+  "description" : "created object filled with data from omdb"
 }
         {code}
         *Status Code:* 400
